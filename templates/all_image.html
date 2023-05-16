@@ -6,6 +6,7 @@
     <div>
         <h3>{{ item.title }}</h3>
         <p>{{ item.description }}</p>
+        <img src="{{ url_for('static', filename=item.image_path) }}" alt="Image">
         <p>Mastery: {{ item.mastery }}</p>
     </div>
 {% endfor %}

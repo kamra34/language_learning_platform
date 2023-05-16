@@ -10,6 +10,7 @@ app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
 db_path = os.path.join(basedir, 'db/test.db')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_path
+app.config['UPLOAD_FOLDER'] = 'static/uploads/images'  # add this line
 db.init_app(app)
 
 # Register the blueprints

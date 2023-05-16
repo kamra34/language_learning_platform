@@ -2,10 +2,10 @@
 
 {% block content %}
 <h1>Image</h1>
-<form method="POST">
+<form method="POST" enctype="multipart/form-data">
     <input type="text" name="title" placeholder="Title" required>
     <textarea name="description" placeholder="Description" required></textarea>
-    <textarea name="image_path" placeholder="Image Path" required></textarea>
+    <input type="file" name="image" accept="image/*" required>
     <input type="submit" value="Add">
 </form>
 <hr>
@@ -14,6 +14,7 @@
     <div>
         <h3>{{ reminder_item.title }}</h3>
         <p>{{ reminder_item.description }}</p>
+        <img src="{{ url_for('static', filename=reminder_item.image_path) }}" alt="Image">
         <form method="POST" action="{{ url_for('image.update_image', id=reminder_item.id) }}">
             <select name="mastery">
                 <option value="Show More">Show More</option>
