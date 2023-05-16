@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>All Vocabulary Items</h1>
+{% for item in items %}
+    <div>
+        <h3>{{ item.title }}</h3>
+        <p>{{ item.description }}</p>
+        <p>Mastery: {{ item.mastery }}</p>
+    </div>
+{% endfor %}
+<a href="{{ url_for('vocabulary') }}">Go Back to Vocabulary Page</a>
+{% endblock %}
