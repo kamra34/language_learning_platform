@@ -50,19 +50,32 @@ def api_vocabulary():
     vocab_items = Vocabulary.query.all()
     return     jsonify([item.to_dict() for item in vocab_items])
 
+@app.route('/all_grammar', methods=['GET'])
+def all_grammar():
+    gramm_items = Grammar.query.all()
+    return render_template('all_grammar.html', items=gramm_items)
+
 @app.route('/grammar', methods=['GET', 'POST'])
 def grammar():
     if request.method == 'POST':
         title = request.form.get('title')
         description = request.form.get('description')
-        mastery = request.form.get('mastery')
-        gram = Grammar(title=title, description=description, mastery=mastery)
+        gram = Grammar(title=title, description=description)
         db.session.add(gram)
         db.session.commit()
         return redirect(url_for('grammar'))
 
-    grammar_items = Grammar.query.all()
-    return render_template('grammar.html', items=grammar_items)
+    reminder_item = Grammar.query.order_by(func.random()).first()
+    return render_template('grammar.html', reminder_item=reminder_item)
+
+@app.route('/grammar/update/<int:id>', methods=['POST'])
+def update_grammar(id):
+    mastery = request.form.get('mastery')
+    gramms = Grammar.query.get(id)
+    if gramms:
+        gramms.mastery = mastery
+        db.session.commit()
+    return redirect(url_for('grammar'))
 
 @app.route('/image', methods=['GET', 'POST'])
 def image():

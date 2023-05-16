@@ -1,18 +1,33 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% block content %}
 <h1>Grammar</h1>
-
-<form action="/grammar" method="POST">
-    <label for="title">Title</label>
-    <input type="text" id="title" name="title" required>
-    <label for="description">Description</label>
-    <input type="text" id="description" name="description" required>
-    <button type="submit">Add Grammar Item</button>
+<form method="POST">
+    <input type="text" name="title" placeholder="Title" required>
+    <textarea name="description" placeholder="Description" required></textarea>
+    <input type="submit" value="Add">
 </form>
-
-<div id="item-container">
-    <!-- Items will be inserted here -->
-</div>
-
+<hr>
+<h2>Reminder Grammar Item</h2>
+{% if reminder_item %}
+    <div>
+        <h3>{{ reminder_item.title }}</h3>
+        <p>{{ reminder_item.description }}</p>
+        <form method="POST" action="{{ url_for('update_grammar', id=reminder_item.id) }}">
+            <select name="mastery">
+                <option value="Show More">Show More</option>
+                <option value="Show Less">Show Less</option>
+                <option value="Mastered">Mastered</option>
+            </select>
+            <input type="submit" value="Update">
+        </form>
+    </div>
+{% else %}
+    <p>No reminder item available.</p>
+{% endif %}
+<hr>
+<a href="{{ url_for('all_grammar') }}">Show All Items</a>
+<br>
+<a href="{{ url_for('home') }}">Go Back to Main Page</a>
 {% endblock %}
+
