@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Image</h1>
+<form method="POST">
+    <input type="text" name="title" placeholder="Title" required>
+    <textarea name="description" placeholder="Description" required></textarea>
+    <textarea name="image_path" placeholder="Image Path" required></textarea>
+    <input type="submit" value="Add">
+</form>
+<hr>
+<h2>Reminder Image Item</h2>
+{% if reminder_item %}
+    <div>
+        <h3>{{ reminder_item.title }}</h3>
+        <p>{{ reminder_item.description }}</p>
+        <form method="POST" action="{{ url_for('image.update_image', id=reminder_item.id) }}">
+            <select name="mastery">
+                <option value="Show More">Show More</option>
+                <option value="Show Less">Show Less</option>
+                <option value="Mastered">Mastered</option>
+            </select>
+            <input type="submit" value="Update">
+        </form>
+    </div>
+{% else %}
+    <p>No reminder item available.</p>
+{% endif %}
+<hr>
+<a href="{{ url_for('image.all_image') }}">Show All Items</a>
+<br>
+<a href="{{ url_for('home') }}">Go Back to Main Page</a>
+{% endblock %}

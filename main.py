@@ -2,6 +2,7 @@ from flask import Flask, render_template
 from language_learning_platform.models.models import db, Vocabulary, Grammar, Image
 from language_learning_platform.routes.vocabulary import vocabulary
 from language_learning_platform.routes.grammar import grammar
+from language_learning_platform.routes.image import image
 import os
 
 app = Flask(__name__)
@@ -14,6 +15,7 @@ db.init_app(app)
 # Register the blueprints
 app.register_blueprint(vocabulary)
 app.register_blueprint(grammar)
+app.register_blueprint(image)
 
 @app.route('/', methods=['GET'])
 def home():

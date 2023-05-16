@@ -1,6 +1,6 @@
 from flask import Blueprint, request, render_template, redirect, url_for
-from language_learning_platform.models import Vocabulary
-from language_learning_platform.models.models import db
+#from language_learning_platform.models import Vocabulary
+from language_learning_platform.models.models import db, Vocabulary
 from sqlalchemy.sql.expression import func
 from flask import jsonify
 

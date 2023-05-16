@@ -1,7 +1,7 @@
 # routes/grammar.py
 from flask import Blueprint, request, render_template, redirect, url_for
-from language_learning_platform.models import Grammar
-from language_learning_platform.models.models import db
+#from language_learning_platform.models import Grammar
+from language_learning_platform.models.models import db, Grammar
 from sqlalchemy.sql.expression import func
 from flask import jsonify
 
