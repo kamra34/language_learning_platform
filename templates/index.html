@@ -1,12 +1,72 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Language Learning App</title>
-</head>
-<body>
-    <h1>Welcome to the Language Learning App</h1>
-    <a href="{{ url_for('vocabulary.vocabulary_page') }}">Vocabulary</a>
-    <a href="{{ url_for('grammar.grammar_page') }}">Grammar</a>
-    <a href="{{ url_for('image.image_page') }}">Image</a>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    body {
+        background-color: black;
+    }
+
+    .circle {
+        width: 200px;
+        height: 200px;
+        background-color: #ff6347;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 20px;
+    }
+
+    .circle-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 100px;
+    }
+
+    .circle a {
+        color: white;
+        text-decoration: none;
+    }
+
+    .circle-text {
+        margin-top: 10px;
+        color: white; /* Add this line to change the color of the text */
+    }
+
+    #vocabulary-text {
+        margin-left: 20px;
+    }
+
+    #grammar-text {
+        margin-left: 50px;
+    }
+
+    #image-text {
+        margin-left: 50px;
+    }
+
+
+</style>
+
+<div class="circle-container">
+    <a href="{{ url_for('vocabulary.vocabulary_page') }}">
+        <div class="circle">
+            <h2>Vocabulary</h2>
+        </div>
+        <!--<p class="circle-text" id="vocabulary-text">Learn new words and phrases</p>-->
+    </a>
+    <a href="{{ url_for('grammar.grammar_page') }}">
+        <div class="circle">
+            <h2>Grammar</h2>
+        </div>
+        <!-- Added the id "grammar-text" here -->
+        <!--<p class="circle-text" id="grammar-text">Learn grammar rules</p>-->
+    </a>
+    <a href="{{ url_for('image.image_page') }}">
+        <div class="circle">
+            <h2>Image</h2>
+        </div>
+        <!--<p class="circle-text" id="image-text">Learn from images</p>-->
+    </a>
+</div>
+{% endblock %}

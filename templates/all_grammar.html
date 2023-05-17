@@ -1,13 +1,37 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<style>
+    .item-card {
+        background-color: #ff6347;
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 20px;
+        color: white;
+    }
+
+    .button {
+        background-color: #008CBA;
+        border: none;
+        color: white;
+        padding: 14px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 50px;
+    }
+</style>
+
 <h1>All Grammar Items</h1>
 {% for item in items %}
-    <div>
-        <h3>{{ item.title }}</h3>
+    <div class="item-card">
+        <h2>{{ item.title }}</h2>
         <p>{{ item.description }}</p>
         <p>Mastery: {{ item.mastery }}</p>
     </div>
 {% endfor %}
-<a href="{{ url_for('grammar.grammar_page') }}">Go Back to Grammar Page</a>
+<a href="{{ url_for('grammar.grammar_page') }}" class="button">Go Back to Grammar Page</a>
 {% endblock %}

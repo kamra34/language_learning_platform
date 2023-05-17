@@ -1,13 +1,39 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>All Vocabulary Items</h1>
+<style>
+    .item-card {
+        background-color: #ff6347;
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 20px;
+        color: white;
+    }
+
+    .button {
+        background-color: #008CBA;
+        border: none;
+        color: white;
+        padding: 14px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 50px;
+    }
+</style>
+
+<div style="text-align: center; margin-right: 20px;"> <!-- Moves the title "Vocabulary" to the right -->
+    <h1 style="color: #080808;">All Vocabulary Items</h1> <!-- Changes title color -->
+</div>
 {% for item in items %}
-    <div>
-        <h3>{{ item.title }}</h3>
+    <div class="item-card">
+        <h2>{{ item.title }}</h2>
         <p>{{ item.description }}</p>
         <p>Mastery: {{ item.mastery }}</p>
     </div>
 {% endfor %}
-<a href="{{ url_for('vocabulary.vocabulary_page') }}">Go Back to Vocabulary Page</a>
+<a href="{{ url_for('vocabulary.vocabulary_page') }}" class="button">Go Back to Vocabulary Page</a>
 {% endblock %}

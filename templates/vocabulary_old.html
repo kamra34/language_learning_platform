@@ -3,19 +3,39 @@
 {% block content %}
 <style>
     body {
-        background-color: #f4f4f4;
+        background-color: #3f346e;
+        background-image: url('path/to/your/image.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-color: #080a28;
     }
 
-    .item-card {
-        background-color: #ff6347;
+    .vocabulary-card {
+        background-color: #60abc4;
         border-radius: 20px;
         padding: 20px;
         margin-bottom: 20px;
         color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .vocabulary-title {
+        font-size: 32px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        text-align: center; /* Aligns title to the right */
+        color: #070707; /* Changes title color */
+    }
+
+    .vocabulary-description {
+        font-size: 18px;
+        text-align: center;
+        font-family: Arial, sans-serif; /* Changes the font */
     }
 
     .form-container {
-        background-color: #e0e0e0;
+        background-color: #60abc4;
         border-radius: 20px;
         padding: 20px;
     }
@@ -30,7 +50,7 @@
     }
 
     input[type=submit] {
-        background-color: #4CAF50;
+        background-color: #ff6347;
         color: white;
         padding: 14px 20px;
         margin: 8px 0;
@@ -54,12 +74,18 @@
     }
 </style>
 
-<h1>Grammar</h1>
+<div style="text-align: center; margin-right: 20px;"> <!-- Moves the title "Vocabulary" to the right -->
+    <h1 style="color: #ff6347;">Vocabulary</h1> <!-- Changes title color -->
+</div>
 
 {% if reminder_item %}
-    <div class="item-card">
+    <!--<div class="item-card">
         <h2>{{ reminder_item.title }}</h2>
         <p>{{ reminder_item.description }}</p>
+    </div>-->
+    <div class="vocabulary-card">
+        <h2 class="vocabulary-title">{{ reminder_item.title }}</h2>
+        <p class="vocabulary-description">{{ reminder_item.description }}</p>
     </div>
 {% endif %}
 
@@ -71,6 +97,6 @@
     </form>
 </div>
 
-<a href="{{ url_for('grammar.all_grammar') }}" class="button">Show All Items</a>
+<a href="{{ url_for('vocabulary.all_vocabulary') }}" class="button">Show All Items</a>
 <a href="{{ url_for('home') }}" class="button">Go Back to Main Page</a>
 {% endblock %}
