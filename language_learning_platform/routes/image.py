@@ -1,5 +1,6 @@
 # routes/image.py
 from flask import Blueprint, render_template, request, redirect, url_for, current_app
+from flask_login import login_required
 from language_learning_platform.models.models import db, Image
 from sqlalchemy.sql.expression import func
 from werkzeug.utils import secure_filename
@@ -16,6 +17,7 @@ def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @image.route('/', methods=['GET', 'POST'])
+@login_required
 def image_page():
     if request.method == 'POST':
         title = request.form.get('title')
@@ -48,6 +50,7 @@ def all_image():
     return render_template('all_image.html', items=image_items)
 
 @image.route('/update/<int:id>', methods=['GET', 'POST'])
+@login_required
 def update_image(id):
     img = Image.query.get(id)
     if request.method == 'POST':
@@ -70,6 +73,7 @@ def update_image(id):
     return render_template('update_image.html', image=img)
 
 @image.route('/delete/<int:id>', methods=['POST'])
+@login_required
 def delete_image(id):
     img = Image.query.get(id)
     if img:
@@ -78,6 +82,7 @@ def delete_image(id):
     return redirect(url_for('image.image_page'))
 
 @image.route('/api/image', methods=['GET'])
+@login_required
 def api_image():
     image_items = Image.query.all()
     return jsonify([item.to_dict() for item in image_items])

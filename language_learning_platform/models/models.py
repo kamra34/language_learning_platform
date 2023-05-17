@@ -1,6 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
 import os
 from flask import current_app
+from flask_login import UserMixin
+from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 
@@ -66,3 +68,24 @@ class Image(db.Model):
             'mastery': self.mastery
         }
 
+
+class User(UserMixin, db.Model):
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(100), unique=True, nullable=False)
+    name = db.Column(db.String(120), nullable=False)
+    password = db.Column(db.String(100), nullable=False)
+
+    def __init__(self, name, email, password, role='member'):
+        self.name = name
+        self.email = email
+        self.password = password
+
+    def set_password(self, password):
+        self.password = generate_password_hash(password)
+    
+    def check_password(self, password):
+        return check_password_hash(self.password, password)
+    
+    def get_id(self):
+        return str(self.id)

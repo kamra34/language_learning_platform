@@ -17,6 +17,21 @@
         margin: 20px;
     }
 
+    .circle_logout {
+        width: 40px;
+        height: 40px;
+        background-color: #fdfdfd;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 0px;
+        position: absolute;
+        left: 20px;
+        /* Adjust the left position as desired */
+        bottom: 50px;
+    }
+
     .circle-container {
         display: flex;
         justify-content: center;
@@ -29,20 +44,31 @@
     }
 
     .circle-text {
-        margin-top: 10px;
+        margin-top: 25px;
         color: white; /* Add this line to change the color of the text */
     }
 
     #vocabulary-text {
-        margin-left: 20px;
+        margin-left: 0px;
+        color: white;
     }
 
     #grammar-text {
-        margin-left: 50px;
+        margin-left: 0px;
+        color: white;
     }
 
     #image-text {
-        margin-left: 50px;
+        margin-left: 0px;
+        color: white;
+    }
+
+    #logout-text {
+        margin-left: 0px;
+        margin-right: 2px;
+        color: #ff6347;
+        font-size: 14px;
+        margin-top: 15px;
     }
 
 
@@ -51,22 +77,31 @@
 <div class="circle-container">
     <a href="{{ url_for('vocabulary.vocabulary_page') }}">
         <div class="circle">
-            <h2>Vocabulary</h2>
+            <h2><p class="circle-text" id="vocabulary-text">Vocabulary</p></h2>
         </div>
         <!--<p class="circle-text" id="vocabulary-text">Learn new words and phrases</p>-->
     </a>
     <a href="{{ url_for('grammar.grammar_page') }}">
         <div class="circle">
-            <h2>Grammar</h2>
+            <h2><p class="circle-text" id="grammar-text">Grammar</p></h2>
         </div>
         <!-- Added the id "grammar-text" here -->
         <!--<p class="circle-text" id="grammar-text">Learn grammar rules</p>-->
     </a>
     <a href="{{ url_for('image.image_page') }}">
         <div class="circle">
-            <h2>Image</h2>
+            <h2><p class="circle-text" id="image-text">Image</p></h2>
         </div>
         <!--<p class="circle-text" id="image-text">Learn from images</p>-->
     </a>
+</div>
+
+<div class="circle-container"></div>
+<a href="{{ url_for('auth.logout') }}">
+    <div class="circle_logout">
+        <h2><p class="circle-text" id="logout-text">Out</p></h2>
+    </div>
+    <!--<p class="circle-text" id="vocabulary-text">Learn new words and phrases</p>-->
+</a>
 </div>
 {% endblock %}
