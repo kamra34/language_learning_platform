@@ -1,34 +1,176 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<h1>Image</h1>
-<form method="POST" enctype="multipart/form-data">
-    <input type="text" name="title" placeholder="Title" required>
-    <textarea name="description" placeholder="Description" required></textarea>
-    <input type="file" name="image" accept="image/*" required>
-    <input type="submit" value="Add">
-</form>
-<hr>
-<h2>Reminder Image Item</h2>
-{% if reminder_item %}
-    <div>
-        <h3>{{ reminder_item.title }}</h3>
-        <p>{{ reminder_item.description }}</p>
-        <img src="{{ url_for('static', filename=reminder_item.image_path) }}" alt="Image">
-        <form method="POST" action="{{ url_for('image.update_image', id=reminder_item.id) }}">
-            <select name="mastery">
-                <option value="Show More">Show More</option>
-                <option value="Show Less">Show Less</option>
-                <option value="Mastered">Mastered</option>
-            </select>
-            <input type="submit" value="Update">
+<style>
+    body {
+        background-color: black;
+        background-position: bottom right;
+        background-repeat: no-repeat;
+        background-size: 100px;
+    }
+
+    .image-card {
+        background-color: #080a28;
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 20px;
+        color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .image-item {
+        font-size: 46px;
+        font-weight: bold;
+        text-align: left;
+        margin-bottom: 20px;
+    }
+
+    .image-description {
+        font-size: 18px;
+        color: white;
+        text-align: left;
+    }
+
+    .tilted-image {
+        transform: rotate(0deg); /* Adjust the tilt angle as desired */
+        opacity: 1; /* Adjust the opacity as desired */
+    }
+
+    .form-container {
+        background-color: #f0d4d4;
+        border-radius: 20px;
+        padding: 10px;
+        position: fixed; /* Change from absolute to fixed */
+        bottom: 100; /* Position it at the bottom of the page */
+        left: 0; /* Position it at the left of the page */
+        right: 0; /* Stretch it to the right of the page */
+        width: 50%; /* Full width */
+        box-sizing: border-box; /* Include padding and border in element's total width and height */
+        display: none; /* Initially hidden */
+        z-index: 1000; /* Make sure it overlays other elements */
+    }
+
+    .form-container input[type=text],
+    .form-container textarea {
+        width: 100%;
+        padding: 8px 12px; /* Adjust the padding as desired */
+        margin: 4px 0;
+        box-sizing: border-box;
+        border: none;
+        border-radius: 4px;
+    }
+
+    .form-container input[type=submit] {
+        background-color: #120236;
+        color: white;
+        padding: 10px 16px; /* Adjust the padding as desired */
+        margin: 4px 0;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        font-size: 14px; /* Adjust the font size as desired */
+    }
+
+    .circle {
+        width: 70px;
+        height: 70px;
+        background-color: #ff6347;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 20px;
+    }
+
+    .circle-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 100px;
+        position: relative;
+        margin-bottom: 2px;
+        text-align: center;
+        bottom: 20px;
+        left: 20px;
+    }
+
+    .circle-container a {
+        text-decoration: none;
+    }
+
+    .circle-container h2 {
+        color: white;
+        font-size: 12px; /* Adjust the font size as desired */
+        margin-top: 4px; /* Adjust the margin as desired */
+    }
+
+    .circle-container .circle {
+        transition: transform 0.2s;
+        cursor: pointer;
+    }
+
+    .circle-container .circle:hover {
+        transform: scale(1.1);
+    }
+</style>
+
+<div class="content-wrapper">
+    <div style="text-align: center; margin-top: 20px;">
+        <h1 class="image-item" style="font-family: 'Comic Sans MS', cursive; color: rgb(250, 248, 248);">
+            {% if reminder_item %}{{ reminder_item.title }}{% endif %}
+        </h1>
+        <p class="image-description">
+            {% if reminder_item %}{{ reminder_item.description }}{% endif %}
+        </p>
+        {% if reminder_item %}
+        <img class="tilted-image" src="{{ url_for('static', filename=reminder_item.image_path) }}" alt="Image">
+        {% endif %}
+    </div>
+
+    <div class="form-container" style="display: none;">
+        <form method="POST" enctype="multipart/form-data">
+            <input type="text" name="title" placeholder="Title" required>
+            <textarea name="description" placeholder="Description" required></textarea>
+            <input type="file" name="image" accept="image/*" required>
+            <input type="submit" value="Add">
         </form>
     </div>
-{% else %}
-    <p>No reminder item available.</p>
-{% endif %}
-<hr>
-<a href="{{ url_for('image.all_image') }}">Show All Items</a>
-<br>
-<a href="{{ url_for('home') }}">Go Back to Main Page</a>
+
+    <script>
+        // Existing JavaScript functions
+    
+        var formContainer = document.querySelector('.form-container');
+    
+        function toggleFormContainer(event) {
+            // Stop the click event from reaching the document
+            event.stopPropagation();
+    
+            formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
+        }
+    
+        // Listen for clicks on the entire document
+        document.addEventListener('click', function(event) {
+            // If the click occurred outside the formContainer and the formContainer is visible, hide it
+            if (formContainer.style.display === 'block') {
+                formContainer.style.display = 'none';
+            }
+        });
+    </script>
+
+    <div class="circle-container">
+        <!-- Add the event argument to the onclick attribute -->
+        <div class="circle" onclick="toggleFormContainer(event);">
+            <h2>Add Item</h2>
+        </div>
+        <a href="{{ url_for('image.all_image') }}">
+            <div class="circle">
+                <h2>All items</h2>
+            </div>
+        </a>
+        <a href="{{ url_for('home') }}">
+            <div class="circle">
+                <h2>Home</h2>
+            </div>
+        </a>
+    </div>
+</div>
 {% endblock %}

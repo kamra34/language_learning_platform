@@ -37,12 +37,33 @@ def all_image():
     image_items = Image.query.all()
     return render_template('all_image.html', items=image_items)
 
-@image.route('/image/update/<int:id>', methods=['POST'])
+@image.route('/update/<int:id>', methods=['GET', 'POST'])
 def update_image(id):
-    mastery = request.form.get('mastery')
+    img = Image.query.get(id)
+    if request.method == 'POST':
+        title = request.form.get('title')
+        description = request.form.get('description')
+        image_file = request.files.get('image')  # Here we get the new image from the form
+        if image_file:
+            filename = secure_filename(image_file.filename)
+            upload_folder = os.path.join(current_app.root_path, current_app.config['UPLOAD_FOLDER'])
+            os.makedirs(upload_folder, exist_ok=True)
+            image_path = os.path.join(upload_folder, filename)
+            image_file.save(image_path)
+            img.image_filename = filename  # If a new image was uploaded, we update the filename in the database
+        if title:
+            img.title = title
+        if description:
+            img.description = description
+        db.session.commit()
+        return redirect(url_for('image.image_page'))
+    return render_template('update_image.html', image=img)
+
+@image.route('/delete/<int:id>', methods=['POST'])
+def delete_image(id):
     img = Image.query.get(id)
     if img:
-        img.mastery = mastery
+        db.session.delete(img)
         db.session.commit()
     return redirect(url_for('image.image_page'))
 
