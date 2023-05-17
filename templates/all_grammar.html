@@ -2,6 +2,9 @@
 
 {% block content %}
 <style>
+    body {
+        background-color: black;
+    }
     .item-card {
         background-color: #ff6347;
         border-radius: 20px;
@@ -50,8 +53,8 @@
     }
 </style>
 
-<div style="text-align: center; margin-right: 20px;"> 
-    <h1 style="color: #080808;">All Grammar Items</h1> <!-- Changes title color -->
+<div style="text-align: center; margin-right: 20px;"> <!-- Moves the title "grammar" to the right -->
+    <h1 style="color: #080808;">All grammar Items</h1> <!-- Changes title color -->
 </div>
 {% for item in items %}
     <div class="item-card">
@@ -72,5 +75,5 @@
         </form>
     </div>
 {% endfor %}
-<a href="{{ url_for('grammar.grammar_page') }}" class="button">Go Back to Grammar Page</a>
+<a href="{{ url_for('grammar.grammar_page') }}" class="button">Go Back to grammar Page</a>
 {% endblock %}
