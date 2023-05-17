@@ -4,6 +4,7 @@ from flask import Blueprint, request, render_template, redirect, url_for
 from language_learning_platform.models.models import db, Grammar
 from sqlalchemy.sql.expression import func
 from flask import jsonify
+import json
 
 grammar = Blueprint('grammar', __name__, url_prefix='/grammar')
 
@@ -18,7 +19,16 @@ def grammar_page():
         return redirect(url_for('grammar.grammar_page'))
 
     reminder_item = Grammar.query.order_by(func.random()).first()
-    return render_template('grammar.html', reminder_item=reminder_item)
+    # Get all Grammar items
+    grammar_items = Grammar.query.all()
+
+    # Convert the items to a list of dictionaries
+    grammar_items = [item.to_dict() for item in grammar_items]
+
+    # Convert the list to JSON
+    grammar_items_json = json.dumps(grammar_items)
+
+    return render_template('grammar.html', reminder_item=reminder_item, grammar_items_json=grammar_items_json)
 
 @grammar.route('/update/<int:id>', methods=['POST'])
 def update_grammar(id):

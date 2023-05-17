@@ -138,39 +138,12 @@
             <textarea name="description" placeholder="Description" required></textarea>
             <input type="submit" value="Add">
         </form>
-    </div>
-
-    <script>
-        var formContainer = document.querySelector('.form-container');
-    
-        // Get the form element
-        var form = document.querySelector('.form-container form');
-    
-        // Add a click event listener to the form
-        form.addEventListener('click', function(event) {
-            // Stop the propagation of the click event
-            event.stopPropagation();
-        });
-    
-        function toggleFormContainer(event) {
-            // Stop the click event from reaching the document
-            event.stopPropagation();
-    
-            formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
-        }
-    
-        // Listen for clicks on the entire document
-        document.addEventListener('click', function(event) {
-            // If the click occurred outside the formContainer and the formContainer is visible, hide it
-            if (formContainer.style.display === 'block') {
-                formContainer.style.display = 'none';
-            }
-        });
-    </script>
-    
+    </div>   
 
     <div class="circle-container">
-        <!-- Add the event argument to the onclick attribute -->
+        <div class="circle" id="nextButton">
+            <h2>Next Item</h2>
+        </div>
         <div class="circle" onclick="toggleFormContainer(event);">
             <h2>Add Item</h2>
         </div>
@@ -186,5 +159,47 @@
         </a>
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var formContainer = document.querySelector('.form-container');
+        var form = document.querySelector('.form-container form');
+        form.addEventListener('click', function (event) {
+            event.stopPropagation();
+        });
 
+        function toggleFormContainer(event) {
+            event.stopPropagation();
+            formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
+        }
+
+        document.addEventListener('click', function (event) {
+            if (formContainer.style.display === 'block') {
+                formContainer.style.display = 'none';
+            }
+        });
+
+        var grammarItems = JSON.parse('{{ grammar_items_json|safe }}');
+        var titleElement = document.querySelector('.grammar-item');
+        var descriptionElement = document.querySelector('.grammar-description');
+
+        function updategrammarItem() {
+            // Get a random index
+            var randomIndex = Math.floor(Math.random() * grammarItems.length);
+
+            // Get the item at the random index
+            var item = grammarItems[randomIndex];
+
+            // Update the title and description.
+            titleElement.textContent = item.title;
+            descriptionElement.textContent = item.description;
+        }
+
+        updategrammarItem();
+
+        var nextButton = document.getElementById('nextButton');
+        nextButton.addEventListener('click', function () {
+            updategrammarItem();
+        });
+    });
+</script>
 {% endblock %}

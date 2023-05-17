@@ -33,28 +33,38 @@
 
     .tilted-image {
         position: absolute;
-        right: 100px; /* Adjust the right position as desired */
-        bottom: 100px; /* Adjust the bottom position as desired */
-        transform: rotate(-10deg); /* Adjust the tilt angle as desired */
-        opacity: 0.8; /* Adjust the opacity as desired */
-        width: 650px; /* Adjust the width as desired */
-        height: 250px; /* Adjust the height as desired */
+        right: 100px;
+        /* Adjust the right position as desired */
+        bottom: 100px;
+        /* Adjust the bottom position as desired */
+        transform: rotate(-10deg);
+        /* Adjust the tilt angle as desired */
+        opacity: 0.8;
+        /* Adjust the opacity as desired */
+        width: 650px;
+        /* Adjust the width as desired */
+        height: 250px;
+        /* Adjust the height as desired */
     }
 
     .form-container {
         background-color: #f0d4d4;
         border-radius: 20px;
         padding: 10px;
-        margin-bottom: 0px; /* add this to push the navigation links down */
+        margin-bottom: 0px;
+        /* add this to push the navigation links down */
         position: absolute;
-        left: 20px; /* Adjust the left position as desired */
-        bottom: 150px; /* Adjust the bottom position as desired */
+        left: 20px;
+        /* Adjust the left position as desired */
+        bottom: 150px;
+        /* Adjust the bottom position as desired */
     }
 
     .form-container input[type=text],
     .form-container textarea {
         width: 100%;
-        padding: 8px 12px; /* Adjust the padding as desired */
+        padding: 8px 12px;
+        /* Adjust the padding as desired */
         margin: 4px 0;
         box-sizing: border-box;
         border: none;
@@ -64,12 +74,14 @@
     .form-container input[type=submit] {
         background-color: #120236;
         color: white;
-        padding: 10px 16px; /* Adjust the padding as desired */
+        padding: 10px 16px;
+        /* Adjust the padding as desired */
         margin: 4px 0;
         border: none;
         border-radius: 50px;
         cursor: pointer;
-        font-size: 14px; /* Adjust the font size as desired */
+        font-size: 14px;
+        /* Adjust the font size as desired */
     }
 
     .circle {
@@ -98,8 +110,10 @@
 
     .circle-container h2 {
         color: white;
-        font-size: 12px; /* Adjust the font size as desired */
-        margin-top: 4px; /* Adjust the margin as desired */
+        font-size: 12px;
+        /* Adjust the font size as desired */
+        margin-top: 4px;
+        /* Adjust the margin as desired */
     }
 
     .circle-container .circle {
@@ -112,10 +126,14 @@
     }
 
     .content-wrapper {
-        min-height: 100vh; /* Set the minimum height to the full viewport height */
-        display: flex; /* Set up a flexbox layout */
-        flex-direction: column; /* Stack the content vertically */
-        justify-content: space-between; /* Put as much space as possible between items */
+        min-height: 100vh;
+        /* Set the minimum height to the full viewport height */
+        display: flex;
+        /* Set up a flexbox layout */
+        flex-direction: column;
+        /* Stack the content vertically */
+        justify-content: space-between;
+        /* Put as much space as possible between items */
     }
 </style>
 
@@ -127,7 +145,7 @@
         <p class="vocabulary-description">
             {% if reminder_item %}{{ reminder_item.description }}{% endif %}
         </p>
-		<img class="tilted-image" src="/static/images/sweden_flag2.jpg" alt="Swedish Flag">
+        <img class="tilted-image" src="/static/images/sweden_flag2.jpg" alt="Swedish Flag">
     </div>
 
     <div class="form-container" style="display: none;">
@@ -138,36 +156,10 @@
         </form>
     </div>
 
-    <script>
-        var formContainer = document.querySelector('.form-container');
-    
-        // Get the form element
-        var form = document.querySelector('.form-container form');
-    
-        // Add a click event listener to the form
-        form.addEventListener('click', function(event) {
-            // Stop the propagation of the click event
-            event.stopPropagation();
-        });
-    
-        function toggleFormContainer(event) {
-            // Stop the click event from reaching the document
-            event.stopPropagation();
-    
-            formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
-        }
-    
-        // Listen for clicks on the entire document
-        document.addEventListener('click', function(event) {
-            // If the click occurred outside the formContainer and the formContainer is visible, hide it
-            if (formContainer.style.display === 'block') {
-                formContainer.style.display = 'none';
-            }
-        });
-    </script>
-    
-
     <div class="circle-container">
+        <div class="circle" id="nextButton">
+            <h2>Next Item</h2>
+        </div>
         <!-- Add the event argument to the onclick attribute -->
         <div class="circle" onclick="toggleFormContainer(event);">
             <h2>Add Item</h2>
@@ -184,4 +176,48 @@
         </a>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var formContainer = document.querySelector('.form-container');
+        var form = document.querySelector('.form-container form');
+        form.addEventListener('click', function (event) {
+            event.stopPropagation();
+        });
+
+        function toggleFormContainer(event) {
+            event.stopPropagation();
+            formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
+        }
+
+        document.addEventListener('click', function (event) {
+            if (formContainer.style.display === 'block') {
+                formContainer.style.display = 'none';
+            }
+        });
+
+        var vocabularyItems = JSON.parse('{{ vocabulary_items_json|safe }}');
+        var titleElement = document.querySelector('.vocabulary-item');
+        var descriptionElement = document.querySelector('.vocabulary-description');
+
+        function updateVocabularyItem() {
+            // Get a random index
+            var randomIndex = Math.floor(Math.random() * vocabularyItems.length);
+
+            // Get the item at the random index
+            var item = vocabularyItems[randomIndex];
+
+            // Update the title and description.
+            titleElement.textContent = item.title;
+            descriptionElement.textContent = item.description;
+        }
+
+        updateVocabularyItem();
+
+        var nextButton = document.getElementById('nextButton');
+        nextButton.addEventListener('click', function () {
+            updateVocabularyItem();
+        });
+    });
+</script>
 {% endblock %}

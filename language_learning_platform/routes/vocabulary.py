@@ -3,6 +3,7 @@ from flask import Blueprint, request, render_template, redirect, url_for
 from language_learning_platform.models.models import db, Vocabulary
 from sqlalchemy.sql.expression import func
 from flask import jsonify
+import json
 
 vocabulary = Blueprint('vocabulary', __name__, url_prefix='/vocabulary')
 
@@ -17,7 +18,16 @@ def vocabulary_page():
         return redirect(url_for('vocabulary.vocabulary_page'))
 
     reminder_item = Vocabulary.query.order_by(func.random()).first()
-    return render_template('vocabulary.html', reminder_item=reminder_item)
+    # Get all vocabulary items
+    vocabulary_items = Vocabulary.query.all()
+
+    # Convert the items to a list of dictionaries
+    vocabulary_items = [item.to_dict() for item in vocabulary_items]
+
+    # Convert the list to JSON
+    vocabulary_items_json = json.dumps(vocabulary_items)
+
+    return render_template('vocabulary.html', reminder_item=reminder_item, vocabulary_items_json=vocabulary_items_json)
 
 @vocabulary.route('/update/<int:id>', methods=['POST'])
 def update_vocabulary(id):
@@ -47,5 +57,6 @@ def all_vocabulary():
 def api_vocabulary():
     vocab_items = Vocabulary.query.all()
     return jsonify([item.to_dict() for item in vocab_items])
+
 
 

@@ -5,6 +5,7 @@ from sqlalchemy.sql.expression import func
 from werkzeug.utils import secure_filename
 from flask import jsonify
 import os
+import json
 
 image = Blueprint('image', __name__, url_prefix='/image')
 
@@ -30,7 +31,16 @@ def image_page():
         db.session.commit()
         return redirect(url_for('image.image_page'))
     reminder_item = Image.query.order_by(func.random()).first()
-    return render_template('image.html', reminder_item=reminder_item)
+    # Get all Image items
+    image_items = Image.query.all()
+
+    # Convert the items to a list of dictionaries
+    image_items = [item.to_dict() for item in image_items]
+
+    # Convert the list to JSON
+    image_items_json = json.dumps(image_items)
+
+    return render_template('image.html', reminder_item=reminder_item, image_items_json=image_items_json)
 
 @image.route('/all_image', methods=['GET'])
 def all_image():
@@ -56,7 +66,7 @@ def update_image(id):
         if description:
             img.description = description
         db.session.commit()
-        return redirect(url_for('image.image_page'))
+        return redirect(url_for('image.all_image'))
     return render_template('update_image.html', image=img)
 
 @image.route('/delete/<int:id>', methods=['POST'])
