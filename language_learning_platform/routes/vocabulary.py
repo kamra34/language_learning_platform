@@ -21,12 +21,22 @@ def vocabulary_page():
 
 @vocabulary.route('/update/<int:id>', methods=['POST'])
 def update_vocabulary(id):
-    mastery = request.form.get('mastery')
+    title = request.form.get('title')
+    description = request.form.get('description')
     vocab = Vocabulary.query.get(id)
     if vocab:
-        vocab.mastery = mastery
+        vocab.title = title
+        vocab.description = description
         db.session.commit()
-    return redirect(url_for('vocabulary.vocabulary_page'))
+    return redirect(url_for('vocabulary.all_vocabulary'))
+
+@vocabulary.route('/delete/<int:id>', methods=['POST'])
+def delete_vocabulary(id):
+    vocab = Vocabulary.query.get(id)
+    if vocab:
+        db.session.delete(vocab)
+        db.session.commit()
+    return redirect(url_for('vocabulary.all_vocabulary'))
 
 @vocabulary.route('/all', methods=['GET'])
 def all_vocabulary():
@@ -37,3 +47,5 @@ def all_vocabulary():
 def api_vocabulary():
     vocab_items = Vocabulary.query.all()
     return jsonify([item.to_dict() for item in vocab_items])
+
+

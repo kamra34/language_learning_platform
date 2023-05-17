@@ -23,14 +23,53 @@
         cursor: pointer;
         border-radius: 50px;
     }
+
+    .item-form {
+        margin-bottom: 20px;
+    }
+
+    .item-form input[type=text],
+    .item-form textarea {
+        width: 100%;
+        padding: 8px 12px; /* Adjust the padding as desired */
+        margin: 4px 0;
+        box-sizing: border-box;
+        border: none;
+        border-radius: 4px;
+    }
+
+    .item-form input[type=submit] {
+        background-color: #120236;
+        color: white;
+        padding: 10px 16px; /* Adjust the padding as desired */
+        margin: 4px 0;
+        border: none;
+        border-radius: 50px;
+        cursor: pointer;
+        font-size: 14px; /* Adjust the font size as desired */
+    }
 </style>
 
-<h1>All Grammar Items</h1>
+<div style="text-align: center; margin-right: 20px;"> 
+    <h1 style="color: #080808;">All Grammar Items</h1> <!-- Changes title color -->
+</div>
 {% for item in items %}
     <div class="item-card">
         <h2>{{ item.title }}</h2>
         <p>{{ item.description }}</p>
         <p>Mastery: {{ item.mastery }}</p>
+
+        <div class="item-form">
+            <form method="POST" action="{{ url_for('grammar.update_grammar', id=item.id) }}">
+                <input type="text" name="title" value="{{ item.title }}" required>
+                <textarea name="description" required>{{ item.description }}</textarea>
+                <input type="submit" value="Update">
+            </form>
+        </div>
+
+        <form method="POST" action="{{ url_for('grammar.delete_grammar', id=item.id) }}">
+            <input class="button" type="submit" value="Delete">
+        </form>
     </div>
 {% endfor %}
 <a href="{{ url_for('grammar.grammar_page') }}" class="button">Go Back to Grammar Page</a>

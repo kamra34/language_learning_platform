@@ -3,67 +3,129 @@
 {% block content %}
 <style>
     body {
-        background-color: #f4f4f4;
+        background-color: black;
+        background-position: bottom right;
+        background-repeat: no-repeat;
+        background-size: 100px;
     }
 
-    .item-card {
-        background-color: #ff6347;
+    .grammar-card {
+        background-color: #080a28;
         border-radius: 20px;
         padding: 20px;
         margin-bottom: 20px;
         color: white;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    }
+
+    .grammar-item {
+        font-size: 46px;
+        font-weight: bold;
+        text-align: left;
+        margin-bottom: 20px;
+    }
+
+    .grammar-description {
+        font-size: 18px;
+        color: white;
+        text-align: left;
+    }
+
+    .tilted-image {
+        position: absolute;
+        right: 100px; /* Adjust the right position as desired */
+        bottom: 100px; /* Adjust the bottom position as desired */
+        transform: rotate(-10deg); /* Adjust the tilt angle as desired */
+        opacity: 0.8; /* Adjust the opacity as desired */
+        width: 650px; /* Adjust the width as desired */
+        height: 250px; /* Adjust the height as desired */
     }
 
     .form-container {
-        background-color: #e0e0e0;
+        background-color: #f0d4d4;
         border-radius: 20px;
-        padding: 20px;
+        padding: 10px;
+        margin-bottom: 0px; /* add this to push the navigation links down */
+        position: absolute;
+        left: 20px; /* Adjust the left position as desired */
+        bottom: 150px; /* Adjust the bottom position as desired */
     }
 
-    input[type=text], textarea {
+    .form-container input[type=text],
+    .form-container textarea {
         width: 100%;
-        padding: 12px 20px;
-        margin: 8px 0;
+        padding: 8px 12px; /* Adjust the padding as desired */
+        margin: 4px 0;
         box-sizing: border-box;
         border: none;
         border-radius: 4px;
     }
 
-    input[type=submit] {
-        background-color: #4CAF50;
+    .form-container input[type=submit] {
+        background-color: #120236;
         color: white;
-        padding: 14px 20px;
-        margin: 8px 0;
+        padding: 10px 16px; /* Adjust the padding as desired */
+        margin: 4px 0;
         border: none;
         border-radius: 50px;
+        cursor: pointer;
+        font-size: 14px; /* Adjust the font size as desired */
+    }
+
+    .circle {
+        width: 70px;
+        height: 70px;
+        background-color: #ff6347;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 20px;
+    }
+
+    .circle-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 100px;
+        position: fixed;
+        margin-bottom: 2px;
+        text-align: center;
+        bottom: 20px;
+        left: 20px;
+    }
+
+    .circle-container a {
+        text-decoration: none;
+    }
+
+    .circle-container h2 {
+        color: white;
+        font-size: 12px; /* Adjust the font size as desired */
+        margin-top: 4px; /* Adjust the margin as desired */
+    }
+
+    .circle-container .circle {
+        transition: transform 0.2s;
         cursor: pointer;
     }
 
-    .button {
-        background-color: #008CBA;
-        border: none;
-        color: white;
-        padding: 14px 20px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin: 4px 2px;
-        cursor: pointer;
-        border-radius: 50px;
+    .circle-container .circle:hover {
+        transform: scale(1.1);
     }
 </style>
 
-<h1>Grammar</h1>
+<div style="text-align: center; margin-top: 20px;">
+    <h1 class="grammar-item" style="font-family: 'Comic Sans MS', cursive; color: rgb(250, 248, 248);">
+        {{ reminder_item.title }}
+    </h1>
+    <p class="grammar-description" onclick="showDescription();">
+        {{ reminder_item.description }}
+    </p>
+    <p class="grammar-description" style="display: none;">Description</p>
+    <img class="tilted-image" src="/static/images/sweden_flag2.jpg" alt="Swedish Flag">
+</div>
 
-{% if reminder_item %}
-    <div class="item-card">
-        <h2>{{ reminder_item.title }}</h2>
-        <p>{{ reminder_item.description }}</p>
-    </div>
-{% endif %}
-
-<div class="form-container">
+<div class="form-container" style="display: none;">
     <form method="POST">
         <input type="text" name="title" placeholder="Title" required>
         <textarea name="description" placeholder="Description" required></textarea>
@@ -71,6 +133,35 @@
     </form>
 </div>
 
-<a href="{{ url_for('grammar.all_grammar') }}" class="button">Show All Items</a>
-<a href="{{ url_for('home') }}" class="button">Go Back to Main Page</a>
+<div class="circle-container">
+    <div class="circle" onclick="toggleFormContainer();">
+        <h2>Add Item</h2>
+    </div>
+    <a href="{{ url_for('grammar.all_grammar') }}">
+        <div class="circle">
+            <h2>All items</h2>
+        </div>
+    </a>
+    <a href="{{ url_for('home') }}">
+        <div class="circle">
+            <h2>Home</h2>
+        </div>
+    </a>
+</div>
+
+<script>
+    function showDescription() {
+        var placeholderElement = document.querySelector('.grammar-description:nth-of-type(2)');
+        var descriptionElement = document.querySelector('.grammar-description:nth-of-type(1)');
+
+        placeholderElement.style.display = 'none';
+        descriptionElement.style.display = 'block';
+    }
+
+    function toggleFormContainer() {
+        var formContainer = document.querySelector('.form-container');
+        formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
+    }
+</script>
+
 {% endblock %}

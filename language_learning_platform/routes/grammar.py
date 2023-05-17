@@ -22,12 +22,22 @@ def grammar_page():
 
 @grammar.route('/update/<int:id>', methods=['POST'])
 def update_grammar(id):
-    mastery = request.form.get('mastery')
-    gram = Grammar.query.get(id)
-    if gram:
-        gram.mastery = mastery
+    title = request.form.get('title')
+    description = request.form.get('description')
+    gramm = Grammar.query.get(id)
+    if gramm:
+        gramm.title = title
+        gramm.description = description
         db.session.commit()
-    return redirect(url_for('grammar.grammar_page'))
+    return redirect(url_for('grammar.all_grammar'))
+
+@grammar.route('/delete/<int:id>', methods=['POST'])
+def delete_grammar(id):
+    gramm = Grammar.query.get(id)
+    if gramm:
+        db.session.delete(gramm)
+        db.session.commit()
+    return redirect(url_for('grammar.all_grammar'))
 
 @grammar.route('/all', methods=['GET'])
 def all_grammar():
