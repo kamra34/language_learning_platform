@@ -83,15 +83,13 @@
     }
 
     .circle-container {
-        display: flex;
-        justify-content: center;
-        margin-top: 100px;
         position: relative;
-        margin-bottom: 2px;
-        text-align: center;
-        bottom: 20px;
-        left: 20px;
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        padding: 10px;
     }
+
 
     .circle-container a {
         text-decoration: none;
@@ -110,6 +108,13 @@
 
     .circle-container .circle:hover {
         transform: scale(1.1);
+    }
+
+    .content-wrapper {
+        min-height: 100vh; /* Set the minimum height to the full viewport height */
+        display: flex; /* Set up a flexbox layout */
+        flex-direction: column; /* Stack the content vertically */
+        justify-content: space-between; /* Put as much space as possible between items */
     }
 </style>
 
@@ -136,9 +141,16 @@
     </div>
 
     <script>
-        // Existing JavaScript functions
-    
         var formContainer = document.querySelector('.form-container');
+    
+        // Get the form element
+        var form = document.querySelector('.form-container form');
+    
+        // Add a click event listener to the form
+        form.addEventListener('click', function(event) {
+            // Stop the propagation of the click event
+            event.stopPropagation();
+        });
     
         function toggleFormContainer(event) {
             // Stop the click event from reaching the document
@@ -155,6 +167,7 @@
             }
         });
     </script>
+    
 
     <div class="circle-container">
         <!-- Add the event argument to the onclick attribute -->

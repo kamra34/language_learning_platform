@@ -84,15 +84,13 @@
     }
 
     .circle-container {
+        position: relative;
+        width: 100%;
         display: flex;
-        justify-content: center;
-        margin-top: 100px;
-        position: fixed;
-        margin-bottom: 2px;
-        text-align: center;
-        bottom: 20px;
-        left: 20px;
+        justify-content: flex-start;
+        padding: 10px;
     }
+
 
     .circle-container a {
         text-decoration: none;
@@ -112,56 +110,81 @@
     .circle-container .circle:hover {
         transform: scale(1.1);
     }
+
+    .content-wrapper {
+        min-height: 100vh; /* Set the minimum height to the full viewport height */
+        display: flex; /* Set up a flexbox layout */
+        flex-direction: column; /* Stack the content vertically */
+        justify-content: space-between; /* Put as much space as possible between items */
+    }
 </style>
 
-<div style="text-align: center; margin-top: 20px;">
-    <h1 class="grammar-item" style="font-family: 'Comic Sans MS', cursive; color: rgb(250, 248, 248);">
-        {{ reminder_item.title }}
-    </h1>
-    <p class="grammar-description" onclick="showDescription();">
-        {{ reminder_item.description }}
-    </p>
-    <p class="grammar-description" style="display: none;">Description</p>
-    <img class="tilted-image" src="/static/images/sweden_flag2.jpg" alt="Swedish Flag">
-</div>
+</style>
 
-<div class="form-container" style="display: none;">
-    <form method="POST">
-        <input type="text" name="title" placeholder="Title" required>
-        <textarea name="description" placeholder="Description" required></textarea>
-        <input type="submit" value="Add">
-    </form>
-</div>
-
-<div class="circle-container">
-    <div class="circle" onclick="toggleFormContainer();">
-        <h2>Add Item</h2>
+<div class="content-wrapper">
+    <div style="text-align: center; margin-top: 20px;">
+        <h1 class="grammar-item" style="font-family: 'Comic Sans MS', cursive; color: rgb(250, 248, 248);">
+            {% if reminder_item %}{{ reminder_item.title }}{% endif %}
+        </h1>
+        <p class="grammar-description">
+            {% if reminder_item %}{{ reminder_item.description }}{% endif %}
+        </p>
+        <img class="tilted-image" src="/static/images/sweden_flag2.jpg" alt="Swedish Flag">
     </div>
-    <a href="{{ url_for('grammar.all_grammar') }}">
-        <div class="circle">
-            <h2>All items</h2>
-        </div>
-    </a>
-    <a href="{{ url_for('home') }}">
-        <div class="circle">
-            <h2>Home</h2>
-        </div>
-    </a>
-</div>
 
-<script>
-    function showDescription() {
-        var placeholderElement = document.querySelector('.grammar-description:nth-of-type(2)');
-        var descriptionElement = document.querySelector('.grammar-description:nth-of-type(1)');
+    <div class="form-container" style="display: none;">
+        <form method="POST" enctype="multipart/form-data">
+            <input type="text" name="title" placeholder="Title" required>
+            <textarea name="description" placeholder="Description" required></textarea>
+            <input type="submit" value="Add">
+        </form>
+    </div>
 
-        placeholderElement.style.display = 'none';
-        descriptionElement.style.display = 'block';
-    }
-
-    function toggleFormContainer() {
+    <script>
         var formContainer = document.querySelector('.form-container');
-        formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
-    }
-</script>
+    
+        // Get the form element
+        var form = document.querySelector('.form-container form');
+    
+        // Add a click event listener to the form
+        form.addEventListener('click', function(event) {
+            // Stop the propagation of the click event
+            event.stopPropagation();
+        });
+    
+        function toggleFormContainer(event) {
+            // Stop the click event from reaching the document
+            event.stopPropagation();
+    
+            formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
+        }
+    
+        // Listen for clicks on the entire document
+        document.addEventListener('click', function(event) {
+            // If the click occurred outside the formContainer and the formContainer is visible, hide it
+            if (formContainer.style.display === 'block') {
+                formContainer.style.display = 'none';
+            }
+        });
+    </script>
+    
+
+    <div class="circle-container">
+        <!-- Add the event argument to the onclick attribute -->
+        <div class="circle" onclick="toggleFormContainer(event);">
+            <h2>Add Item</h2>
+        </div>
+        <a href="{{ url_for('grammar.all_grammar') }}">
+            <div class="circle">
+                <h2>All items</h2>
+            </div>
+        </a>
+        <a href="{{ url_for('home') }}">
+            <div class="circle">
+                <h2>Home</h2>
+            </div>
+        </a>
+    </div>
+</div>
 
 {% endblock %}
