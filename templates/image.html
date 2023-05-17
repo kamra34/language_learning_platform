@@ -166,7 +166,7 @@
             event.stopPropagation();
         });
 
-        function toggleFormContainer(event) {
+        window.toggleFormContainer = function(event) {
             event.stopPropagation();
             formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
         }

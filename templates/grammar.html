@@ -118,9 +118,6 @@
         justify-content: space-between; /* Put as much space as possible between items */
     }
 </style>
-
-</style>
-
 <div class="content-wrapper">
     <div style="text-align: center; margin-top: 20px;">
         <h1 class="grammar-item" style="font-family: 'Comic Sans MS', cursive; color: rgb(250, 248, 248);">
@@ -167,7 +164,7 @@
             event.stopPropagation();
         });
 
-        function toggleFormContainer(event) {
+        window.toggleFormContainer = function(event) {
             event.stopPropagation();
             formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
         }
@@ -189,7 +186,7 @@
             // Get the item at the random index
             var item = grammarItems[randomIndex];
 
-            // Update the title and description.
+            // Update the title, description and grammar.
             titleElement.textContent = item.title;
             descriptionElement.textContent = item.description;
         }

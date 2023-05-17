@@ -185,7 +185,7 @@
             event.stopPropagation();
         });
 
-        function toggleFormContainer(event) {
+        window.toggleFormContainer = function(event) {
             event.stopPropagation();
             formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
         }
@@ -200,23 +200,23 @@
         var titleElement = document.querySelector('.vocabulary-item');
         var descriptionElement = document.querySelector('.vocabulary-description');
 
-        function updateVocabularyItem() {
+        function updatevocabularyItem() {
             // Get a random index
             var randomIndex = Math.floor(Math.random() * vocabularyItems.length);
 
             // Get the item at the random index
             var item = vocabularyItems[randomIndex];
 
-            // Update the title and description.
+            // Update the title, description and vocabulary.
             titleElement.textContent = item.title;
             descriptionElement.textContent = item.description;
         }
 
-        updateVocabularyItem();
+        updatevocabularyItem();
 
         var nextButton = document.getElementById('nextButton');
         nextButton.addEventListener('click', function () {
-            updateVocabularyItem();
+            updatevocabularyItem();
         });
     });
 </script>
