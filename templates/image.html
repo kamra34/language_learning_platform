@@ -32,8 +32,10 @@
     }
 
     .tilted-image {
-        transform: rotate(0deg); /* Adjust the tilt angle as desired */
-        opacity: 1; /* Adjust the opacity as desired */
+        transform: rotate(0deg);
+        /* Adjust the tilt angle as desired */
+        opacity: 1;
+        /* Adjust the opacity as desired */
     }
 
     .form-container {
@@ -52,7 +54,8 @@
     .form-container input[type=text],
     .form-container textarea {
         width: 100%;
-        padding: 8px 12px; /* Adjust the padding as desired */
+        padding: 8px 12px;
+        /* Adjust the padding as desired */
         margin: 4px 0;
         box-sizing: border-box;
         border: none;
@@ -62,12 +65,14 @@
     .form-container input[type=submit] {
         background-color: #120236;
         color: white;
-        padding: 10px 16px; /* Adjust the padding as desired */
+        padding: 10px 16px;
+        /* Adjust the padding as desired */
         margin: 4px 0;
         border: none;
         border-radius: 50px;
         cursor: pointer;
-        font-size: 14px; /* Adjust the font size as desired */
+        font-size: 14px;
+        /* Adjust the font size as desired */
     }
 
     .circle {
@@ -96,8 +101,10 @@
 
     .circle-container h2 {
         color: white;
-        font-size: 12px; /* Adjust the font size as desired */
-        margin-top: 4px; /* Adjust the margin as desired */
+        font-size: 12px;
+        /* Adjust the font size as desired */
+        margin-top: 4px;
+        /* Adjust the margin as desired */
     }
 
     .circle-container .circle {
@@ -110,46 +117,53 @@
     }
 
     .content-wrapper {
-        min-height: 100vh; /* Set the minimum height to the full viewport height */
-        display: flex; /* Set up a flexbox layout */
-        flex-direction: column; /* Stack the content vertically */
-        justify-content: space-between; /* Put as much space as possible between items */
+        min-height: 100vh;
+        /* Set the minimum height to the full viewport height */
+        display: flex;
+        /* Set up a flexbox layout */
+        flex-direction: column;
+        /* Stack the content vertically */
+        justify-content: space-between;
+        /* Put as much space as possible between items */
     }
 </style>
 
 <div class="content-wrapper">
-    <div style="text-align: center; margin-top: 20px;">
-        <h1 class="image-item" style="font-family: 'Comic Sans MS', cursive; color: rgb(250, 248, 248);">
-            {% if reminder_item %}{{ reminder_item.title }}{% endif %}
-        </h1>
-        <p class="image-description">
-            {% if reminder_item %}{{ reminder_item.description }}{% endif %}
-        </p>
-        {% if reminder_item %}
-        <img class="tilted-image" src="{{ url_for('static', filename=reminder_item.image_path) }}" alt="Image">
-        {% endif %}
-    </div>
+    <div class="content-wrapper">
+        <div style="text-align: center; margin-top: 20px;">
+            <h1 class="image-item" style="font-family: 'Comic Sans MS', cursive; color: rgb(250, 248, 248);">
+                {% if reminder_item %}{{ reminder_item.title }}{% endif %}
+            </h1>
+            <p class="image-description">
+                {% if reminder_item %}{{ reminder_item.description }}{% endif %}
+            </p>
+            <div id="fileElement"></div>
+        </div>
 
-    <div class="form-container" style="display: none;">
-        <form method="POST" enctype="multipart/form-data">
-            <input type="text" name="title" placeholder="Title" required>
-            <textarea name="description" placeholder="Description" required></textarea>
-            <input type="file" name="image" accept="image/*" required>
-            <input type="submit" value="Add">
-        </form>
-    </div>   
     <div class="circle-container">
         <div class="circle" id="nextButton">
             <h2>Next Item</h2>
         </div>
+
+        <div class="form-container" style="display: none;">
+            <form method="POST" enctype="multipart/form-data">
+                <input type="text" name="title" placeholder="Title" required>
+                <textarea name="description" placeholder="Description" required></textarea>
+                <input type="file" name="image" accept="image/*,.pdf" required>
+                <input type="submit" value="Add">
+            </form>
+        </div>
+
         <div class="circle" onclick="toggleFormContainer(event);">
             <h2>Add Item</h2>
         </div>
+
         <a href="{{ url_for('image.all_image') }}">
             <div class="circle">
                 <h2>All items</h2>
             </div>
         </a>
+
         <a href="{{ url_for('home') }}">
             <div class="circle">
                 <h2>Home</h2>
@@ -165,7 +179,7 @@
             event.stopPropagation();
         });
 
-        window.toggleFormContainer = function(event) {
+        window.toggleFormContainer = function (event) {
             event.stopPropagation();
             formContainer.style.display = formContainer.style.display === 'none' ? 'block' : 'none';
         }
@@ -183,17 +197,33 @@
 
         var staticPath = "{{ url_for('static', filename='') }}";  // Store the static path
 
+        var fileElement = document.getElementById('fileElement');  // Select the div that will hold the file
+        var staticPath = "{{ url_for('static', filename='') }}";  // Store the static path
+
         function updateimageItem() {
-            // Get a random index
             var randomIndex = Math.floor(Math.random() * imageItems.length);
-
-            // Get the item at the random index
             var item = imageItems[randomIndex];
-
-            // Update the title, description and image.
             titleElement.textContent = item.title;
             descriptionElement.textContent = item.description;
-            imageElement.src = staticPath + item.image_path; // Update the src attribute of the image element
+
+            var filetype = item.filetype;
+            var newElement;
+            if (filetype == "pdf") {
+                newElement = document.createElement('embed');
+                newElement.type = "application/pdf";
+                newElement.width = "500";
+                newElement.height = "800";
+                newElement.src = staticPath + item.image_path;
+                newElement.setAttribute("pluginspage", "http://www.adobe.com/products/acrobat/readstep2.html");
+            } else {
+                newElement = document.createElement('img');
+                newElement.className = "tilted-image";
+                newElement.alt = "Image";
+                newElement.src = staticPath + item.image_path;
+            }
+            
+            fileElement.innerHTML = '';
+            fileElement.appendChild(newElement);
         }
 
         updateimageItem();

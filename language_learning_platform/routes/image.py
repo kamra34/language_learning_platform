@@ -11,7 +11,7 @@ import json
 image = Blueprint('image', __name__, url_prefix='/image')
 
 UPLOAD_FOLDER = 'uploads/images'
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'pdf'}
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -24,15 +24,17 @@ def image_page():
         description = request.form.get('description')
         image_file = request.files['image']
         filename = secure_filename(image_file.filename)  # use secure_filename to ensure a safe filename
-        upload_folder = os.path.join(current_app.root_path, current_app.config['UPLOAD_FOLDER'])
-        os.makedirs(upload_folder, exist_ok=True)
-        image_path = os.path.join(upload_folder, filename)
-        image_file.save(image_path)
-        img = Image(title=title, description=description, image_filename=filename)  # pass the filename, not the path
-        db.session.add(img)
-        db.session.commit()
+        if allowed_file(filename):
+            upload_folder = os.path.join(current_app.root_path, current_app.config['UPLOAD_FOLDER'])
+            os.makedirs(upload_folder, exist_ok=True)
+            image_path = os.path.join(upload_folder, filename)
+            image_file.save(image_path)
+            img = Image(title=title, description=description, image_filename=filename)  # pass the filename, not the path
+            db.session.add(img)
+            db.session.commit()
         return redirect(url_for('image.image_page'))
     reminder_item = Image.query.order_by(func.random()).first()
+    file_type = 'pdf' if reminder_item.image_filename.rsplit('.', 1)[1].lower() == 'pdf' else 'image'
     # Get all Image items
     image_items = Image.query.all()
 
@@ -42,7 +44,7 @@ def image_page():
     # Convert the list to JSON
     image_items_json = json.dumps(image_items)
 
-    return render_template('image.html', reminder_item=reminder_item, image_items_json=image_items_json)
+    return render_template('image.html', reminder_item=reminder_item, image_items_json=image_items_json, file_type=file_type)
 
 @image.route('/all_image', methods=['GET'])
 def all_image():
