@@ -10,9 +10,22 @@ from language_learning_platform.routes.auth import auth
 
 app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
-basedir = os.path.abspath(os.path.dirname(__file__))
-db_path = os.path.join(basedir, 'db/test.db')
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_path
+
+if 'PYTHONANYWHERE_DOMAIN' in os.environ:
+    SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
+    username=os.environ.get("DB_USERNAME"),
+    password=os.environ.get("DB_PASSWORD"),
+    hostname=os.environ.get("DB_HOSTNAME"),
+    databasename=os.environ.get("DB_NAME"),
+    )
+    app.config["SQLALCHEMY_DATABASE_URI"] = SQLALCHEMY_DATABASE_URI
+    app.config["SQLALCHEMY_POOL_RECYCLE"] = 299
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+else:
+    basedir = os.path.abspath(os.path.dirname(__file__))
+    db_path = os.path.join(basedir, 'db/test.db')
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_path
+
 app.config['UPLOAD_FOLDER'] = 'static/uploads/images'  # add this line
 db.init_app(app)
 
