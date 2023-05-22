@@ -2,6 +2,7 @@ from flask import Flask, render_template
 from language_learning_platform.models.models import db, User, Vocabulary, Grammar, Image
 from flask_login import LoginManager, current_user, login_required
 import os
+from dotenv import load_dotenv
 import secrets
 from language_learning_platform.routes.vocabulary import vocabulary
 from language_learning_platform.routes.grammar import grammar
@@ -12,6 +13,7 @@ app = Flask(__name__)
 app.secret_key = secrets.token_hex(16)
 
 if 'PYTHONANYWHERE_DOMAIN' in os.environ:
+    load_dotenv()
     SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
     username=os.environ.get("DB_USERNAME"),
     password=os.environ.get("DB_PASSWORD"),
