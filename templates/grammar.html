@@ -124,7 +124,7 @@
             {% if reminder_item %}{{ reminder_item.title }}{% endif %}
         </h1>
         <p class="grammar-description">
-            {% if reminder_item %}{{ reminder_item.description }}{% endif %}
+            {% if reminder_item %}{{ reminder_item.description|replace('\r\n', '<br>')|safe  }}{% endif %}
         </p>
         <img class="tilted-image" src="/static/images/sweden_flag2.jpg" alt="Swedish Flag">
     </div>
@@ -157,6 +157,9 @@
     </div>
 </div>
 <script>
+    var grammarItemsJSON = {{ grammar_items_json|safe }};
+</script>
+<script>
     document.addEventListener("DOMContentLoaded", function () {
         var formContainer = document.querySelector('.form-container');
         var form = document.querySelector('.form-container form');
@@ -175,11 +178,11 @@
             }
         });
 
-        var grammarItems = JSON.parse('{{ grammar_items_json|safe }}');
+        var grammarItems = grammarItemsJSON;
         var titleElement = document.querySelector('.grammar-item');
         var descriptionElement = document.querySelector('.grammar-description');
 
-        function updategrammarItem() {
+        function updateGrammarItem() {
             // Get a random index
             var randomIndex = Math.floor(Math.random() * grammarItems.length);
 
@@ -188,14 +191,14 @@
 
             // Update the title, description and grammar.
             titleElement.textContent = item.title;
-            descriptionElement.textContent = item.description;
+            descriptionElement.innerText = item.description;
         }
 
-        updategrammarItem();
+        updateGrammarItem();
 
         var nextButton = document.getElementById('nextButton');
         nextButton.addEventListener('click', function () {
-            updategrammarItem();
+            updateGrammarItem();
         });
     });
 </script>

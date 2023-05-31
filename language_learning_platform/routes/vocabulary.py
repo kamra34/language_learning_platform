@@ -23,10 +23,18 @@ def vocabulary_page():
     # Get all vocabulary items
     vocabulary_items = Vocabulary.query.all()
 
-    # Convert the items to a list of dictionaries
-    vocabulary_items = [item.to_dict() for item in vocabulary_items]
+    # Convert the items to a list of dictionaries manually
+    vocabulary_items = [
+        {
+            'id': item.id,
+            'title': item.title,
+            'description': item.description,
+            'mastery': item.mastery
+        }
+        for item in vocabulary_items
+    ]
 
-    # Convert the list to JSON
+    # Convert the list to JSON using Flask's jsonify()
     vocabulary_items_json = json.dumps(vocabulary_items)
 
     return render_template('vocabulary.html', reminder_item=reminder_item, vocabulary_items_json=vocabulary_items_json)
@@ -35,7 +43,7 @@ def vocabulary_page():
 @login_required
 def update_vocabulary(id):
     title = request.form.get('title')
-    description = request.form.get('description')
+    description = request.form.get('description').replace('\r\n', '\n')
     vocab = Vocabulary.query.get(id)
     if vocab:
         vocab.title = title
@@ -62,7 +70,19 @@ def all_vocabulary():
 @login_required
 def api_vocabulary():
     vocab_items = Vocabulary.query.all()
-    return jsonify([item.to_dict() for item in vocab_items])
 
+    # Convert the items to a list of dictionaries manually
+    vocabulary_items = [
+        {
+            'id': item.id,
+            'title': item.title,
+            'description': item.description,
+            'mastery': item.mastery
+        }
+        for item in vocab_items
+    ]
 
+    # Convert the list to JSON using Flask's jsonify()
+    vocabulary_items_json = jsonify(vocabulary_items)
 
+    return vocabulary_items_json

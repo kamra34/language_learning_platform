@@ -24,7 +24,15 @@ def grammar_page():
     grammar_items = Grammar.query.all()
 
     # Convert the items to a list of dictionaries
-    grammar_items = [item.to_dict() for item in grammar_items]
+    grammar_items = [
+        {
+            'id': item.id,
+            'title': item.title,
+            'description': item.description,
+            'mastery': item.mastery
+        }
+        for item in grammar_items
+    ]
 
     # Convert the list to JSON
     grammar_items_json = json.dumps(grammar_items)
@@ -35,7 +43,7 @@ def grammar_page():
 @login_required
 def update_grammar(id):
     title = request.form.get('title')
-    description = request.form.get('description')
+    description = request.form.get('description').replace('\r\n', '\n')
     gramm = Grammar.query.get(id)
     if gramm:
         gramm.title = title

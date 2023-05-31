@@ -143,7 +143,7 @@
             {% if reminder_item %}{{ reminder_item.title }}{% endif %}
         </h1>
         <p class="vocabulary-description">
-            {% if reminder_item %}{{ reminder_item.description }}{% endif %}
+            {% if reminder_item %}{{ reminder_item.description|replace('\r\n', '<br>')|safe }}{% endif %}
         </p>
         <img class="tilted-image" src="/static/images/sweden_flag2.jpg" alt="Swedish Flag">
     </div>
@@ -176,6 +176,9 @@
         </a>
     </div>
 </div>
+<script>
+    var vocabularyItemsJSON = {{ vocabulary_items_json|safe }};
+</script>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
@@ -196,11 +199,11 @@
             }
         });
 
-        var vocabularyItems = JSON.parse('{{ vocabulary_items_json|safe }}');
+        var vocabularyItems = vocabularyItemsJSON;
         var titleElement = document.querySelector('.vocabulary-item');
         var descriptionElement = document.querySelector('.vocabulary-description');
 
-        function updatevocabularyItem() {
+        function updateVocabularyItem() {
             // Get a random index
             var randomIndex = Math.floor(Math.random() * vocabularyItems.length);
 
@@ -209,15 +212,16 @@
 
             // Update the title, description and vocabulary.
             titleElement.textContent = item.title;
-            descriptionElement.textContent = item.description;
+            descriptionElement.innerText = item.description;
         }
 
-        updatevocabularyItem();
+        updateVocabularyItem();
 
         var nextButton = document.getElementById('nextButton');
         nextButton.addEventListener('click', function () {
-            updatevocabularyItem();
+            updateVocabularyItem();
         });
     });
 </script>
+
 {% endblock %}
