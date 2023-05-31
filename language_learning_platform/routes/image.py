@@ -34,7 +34,10 @@ def image_page():
             db.session.commit()
         return redirect(url_for('image.image_page'))
     reminder_item = Image.query.order_by(func.random()).first()
-    file_type = 'pdf' if reminder_item.image_filename.rsplit('.', 1)[1].lower() == 'pdf' else 'image'
+    if reminder_item:
+        file_type = 'pdf' if reminder_item.image_filename.rsplit('.', 1)[1].lower() == 'pdf' else 'image'
+    else:
+        file_type = 'image'
     # Get all Image items
     image_items = Image.query.all()
 
@@ -81,7 +84,7 @@ def delete_image(id):
     if img:
         db.session.delete(img)
         db.session.commit()
-    return redirect(url_for('image.image_page'))
+    return redirect(url_for('image.all_image'))
 
 @image.route('/api/image', methods=['GET'])
 @login_required
